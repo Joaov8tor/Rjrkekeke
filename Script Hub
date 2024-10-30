@@ -1,0 +1,67 @@
+--[[
+    Script Hub de Velocidade para Roblox
+    Versão Open Source - Básico
+    Este script permite ao usuário aumentar a velocidade de caminhada
+    no Roblox. Utilize apenas em servidores onde você tenha permissão.
+    
+    Aviso: Modificar jogos com scripts pode resultar em banimento.
+    Use por sua conta e risco.
+--]]
+
+-- Variáveis Globais
+local SpeedToggle = false -- Estado inicial do modificador de velocidade
+local SpeedAmount = 50    -- Velocidade customizável (padrão: 50)
+local DefaultSpeed = 16   -- Velocidade padrão do Roblox
+
+-- Configurações do Jogador
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+
+-- Função para Aplicar a Velocidade
+local function SetSpeed()
+    if SpeedToggle then
+        Character.Humanoid.WalkSpeed = SpeedAmount
+    else
+        Character.Humanoid.WalkSpeed = DefaultSpeed
+    end
+end
+
+-- Interface do Usuário - Botão de Ativação
+local UserInterface = Instance.new("ScreenGui")
+UserInterface.Name = "SpeedHubUI"
+UserInterface.Parent = game.CoreGui
+
+local SpeedButton = Instance.new("TextButton")
+SpeedButton.Name = "SpeedButton"
+SpeedButton.Text = "Ativar Velocidade"
+SpeedButton.Size = UDim2.new(0, 200, 0, 50)
+SpeedButton.Position = UDim2.new(0.5, -100, 0.5, -25)
+SpeedButton.BackgroundColor3 = Color3.new(0.2, 0.6, 0.8)
+SpeedButton.TextColor3 = Color3.new(1, 1, 1)
+SpeedButton.Font = Enum.Font.SourceSansBold
+SpeedButton.TextSize = 20
+SpeedButton.Parent = UserInterface
+
+-- Função de Alternância de Velocidade
+SpeedButton.MouseButton1Click:Connect(function()
+    SpeedToggle = not SpeedToggle
+    SpeedButton.Text = SpeedToggle and "Desativar Velocidade" or "Ativar Velocidade"
+    SetSpeed()
+end)
+
+-- Detectar Mudanças no Personagem (Caso o jogador respawne)
+Player.CharacterAdded:Connect(function(newCharacter)
+    Character = newCharacter
+    SetSpeed()
+end)
+
+-- Instruções:
+-- 1. Modifique `SpeedAmount` para definir a velocidade desejada.
+-- 2. Modifique `DefaultSpeed` se a velocidade padrão do jogo for diferente de 16.
+-- 3. Certifique-se de usar este script apenas em servidores com permissão.
+
+-- Exemplo de Contribuição Open Source:
+-- - Melhorar a interface do usuário.
+-- - Adicionar funções para salvar as preferências do usuário.
+-- - Implementar sistemas básicos de segurança ou otimização.
+-- - Expandir para incluir mais funcionalidades além da velocidade.
